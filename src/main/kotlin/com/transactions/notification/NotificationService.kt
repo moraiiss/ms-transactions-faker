@@ -4,8 +4,8 @@ import com.transactions.transaction.Transaction
 import org.springframework.stereotype.Service
 
 @Service
-class NotificationService {
+class NotificationService (val notificationProducer: NotificationProducer) {
     fun notify(transaction: Transaction) {
-
+        notificationProducer.sendNotification(transaction)
     }
 }

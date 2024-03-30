@@ -15,6 +15,9 @@ class TransactionService (
     val authorizerService: AuthorizerService,
     val notificationService: NotificationService
 ) {
+    fun list(): MutableList<Transaction> {
+        return transactionRepository.findAll()
+    }
     @Transactional
     fun create(transaction: Transaction): Transaction {
 
