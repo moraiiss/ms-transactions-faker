@@ -1,6 +1,5 @@
 package com.transactions.wallet
 
-import com.sun.tools.javac.tree.TreeInfo.fullName
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.math.BigDecimal
@@ -19,6 +18,12 @@ data class Wallet(
     fun debit (value: BigDecimal): Wallet {
         return Wallet(
             id, name, document, email, password, type, balance.subtract(value)
+        )
+    }
+
+    fun credit (value: BigDecimal): Wallet {
+        return Wallet (
+            id, name, document, email, password, type, balance.add(value)
         )
     }
 }

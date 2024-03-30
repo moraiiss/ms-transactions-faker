@@ -5,3 +5,6 @@ compile:
 
 run:
 	mvn spring-boot:run
+
+up:
+	docker-compose up -d

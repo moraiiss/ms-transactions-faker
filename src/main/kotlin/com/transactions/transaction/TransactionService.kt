@@ -24,11 +24,15 @@ class TransactionService (
         validate(transaction)
 
         val newTransaction = transactionRepository.save(transaction)
-        val wallet = walletRepository.findById(transaction.payer).get()
 
-        walletRepository.save(wallet.debit(transaction.value))
-        authorizerService.authorize(transaction)
-        notificationService.notify(transaction)
+        val walletPayer = walletRepository.findById(transaction.payer).get()
+        val walletPayee = walletRepository.findById(transaction.payee).get()
+
+        walletRepository.save(walletPayer.debit(transaction.value))
+        walletRepository.save(walletPayee.credit(transaction.value))
+
+        //authorizerService.authorize(transaction)
+        //notificationService.notify(transaction)
 
         return newTransaction;
     }

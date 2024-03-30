@@ -1,6 +1,5 @@
 package com.transactions.transaction
 
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.math.BigDecimal
@@ -12,9 +11,10 @@ data class Transaction(
     val payee: Long,
     val payer: Long,
     var value: BigDecimal,
-    @CreatedDate val createdAt: LocalDateTime
+    var createdAt: LocalDateTime?
 ) {
     init {
         value = value.setScale(2)
+        createdAt = LocalDateTime.now()
     }
 }
