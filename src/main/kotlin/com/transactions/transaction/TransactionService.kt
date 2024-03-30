@@ -1,9 +1,9 @@
 package com.transactions.transaction
 
 import com.transactions.authorization.AuthorizerService
+import com.transactions.notification.NotificationService
 import com.transactions.wallet.WalletEnum
 import com.transactions.wallet.WalletRepository
-import jakarta.transaction.InvalidTransactionException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 
@@ -12,26 +12,20 @@ import org.springframework.stereotype.Service
 class TransactionService (
     val transactionRepository: TransactionRepository,
     val walletRepository: WalletRepository,
-    val authorizerService: AuthorizerService
+    val authorizerService: AuthorizerService,
+    val notificationService: NotificationService
 ) {
     @Transactional
     fun create(transaction: Transaction): Transaction {
 
-        // validar
         validate(transaction)
 
-        // cria a nova transacao
         val newTransaction = transactionRepository.save(transaction)
-
-        // debita da carteira do pagador
         val wallet = walletRepository.findById(transaction.payer).get()
+
         walletRepository.save(wallet.debit(transaction.value))
-
-        // autorizacao externa
         authorizerService.authorize(transaction)
-
-        // notificacao da transacao
-
+        notificationService.notify(transaction)
 
         return newTransaction;
     }

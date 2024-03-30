@@ -19,7 +19,7 @@ class AuthorizerService (
             .toEntity(Authorization::class.java)
 
         if (response.statusCode.isError || !response.body?.isAuthorized()!!) {
-            throw RuntimeException("Unauthorized")
+            throw UnauthorizedException("Unauthorized")
         }
     }
 }
