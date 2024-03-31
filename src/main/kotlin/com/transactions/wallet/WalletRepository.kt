@@ -1,5 +1,7 @@
 package com.transactions.wallet
 
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.ListCrudRepository
+import org.springframework.stereotype.Repository
 
-interface WalletRepository : CrudRepository<Wallet, Long>
+@Repository
+interface WalletRepository : ListCrudRepository<Wallet, Long>
