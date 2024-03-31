@@ -31,25 +31,21 @@ class TransactionService (
         walletRepository.save(walletPayer.debit(transaction.value))
         walletRepository.save(walletPayee.credit(transaction.value))
 
-        //authorizerService.authorize(transaction)
-        //notificationService.notify(transaction)
+        authorizerService.authorize(transaction)
+        notificationService.notify(transaction)
 
         return newTransaction;
     }
 
+
     fun validate(transaction: Transaction) {
-        walletRepository.findById(transaction.payee)
-            .map {
-                walletRepository.findById(transaction.payer)
-                    .map {
-                        it.type == WalletEnum.PAYER.value &&
-                            it.balance.compareTo(transaction.value) >= 0 &&
-                                !it.id.equals(transaction.payee)
-                    }.orElseThrow {
-                        InvalidTransactionException("Invalid transaction: $transaction")
-                    }
-            }.orElseThrow {
-                InvalidTransactionException("Invalid transaction: $transaction")
-            }
+
+        val payer = walletRepository.findById(transaction.payer)
+
+        payer.map {
+            if (it.type == WalletEnum.SELLER.value) throw InvalidTransactionException("Payer can`t be a seller")
+            if (it.id == transaction.payee) throw InvalidTransactionException("Receiver cannot be the same as the payer")
+            if (it.balance < transaction.value) throw InvalidTransactionException("Wallet not enough funds")
+        }
     }
 }

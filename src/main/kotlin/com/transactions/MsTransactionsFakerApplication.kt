@@ -17,5 +17,5 @@ fun main(args: Array<String>) {
 fun notificationTopic(): NewTopic {
     return TopicBuilder
         .name("transaction-notification")
-        .build();
+        .build()
 }
