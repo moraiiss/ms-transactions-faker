@@ -31,10 +31,10 @@ class TransactionService (
         walletRepository.save(walletPayer.debit(transaction.value))
         walletRepository.save(walletPayee.credit(transaction.value))
 
-        authorizerService.authorize(transaction)
-        notificationService.notify(transaction)
+        //authorizerService.authorize(transaction)
+        //notificationService.notify(transaction)
 
-        return newTransaction;
+        return newTransaction
     }
 
 
